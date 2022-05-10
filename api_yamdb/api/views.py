@@ -7,12 +7,6 @@ from reviews.models import Category, Genre, Title
 from .serializers import (CategorySerializer, GenreSerializer, TitleCreateSerializer, TitleSerializer)
 
 class TitleViewSet(viewsets.ModelViewSet):
-    """
-    Admin can manage titles, other can only read
-    titles/ - get all titles
-    titles/{id}/ - get title with id
-    titles/?gerne,category,year,name - filter titles
-    """
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
 
@@ -22,13 +16,6 @@ class TitleViewSet(viewsets.ModelViewSet):
         return TitleSerializer
 
 class GenreViewSet(viewsets.ModelViewSet):
-    """
-    Admin can manage genres, other can only read
-    /genres/ - get all genres
-    /genres/{id}/ - get genre with id
-    /genres/{slug}/ - delete genre with slug
-    /genres/?search=name - search genre with name
-    """
     queryset = Genre.objects.all()
     serializer_class = GenreSerializer
     filter_backends = (filters.SearchFilter,)
@@ -47,13 +34,6 @@ class GenreViewSet(viewsets.ModelViewSet):
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    """
-    Admin can manage genres, other can only read
-    /categories/ - get all categories
-    /categories/{id}/ - get category with id
-    /categories/{slug}/ - delete category with slug
-    /genres/?search=name - search category with name
-    """
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     filter_backends = (filters.SearchFilter,)
