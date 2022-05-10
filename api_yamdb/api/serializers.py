@@ -1,7 +1,6 @@
 from django.db.models import Avg
 from django.utils import timezone
 from rest_framework import serializers
-
 from reviews.models import Category, Genre, Title
 
 
@@ -37,7 +36,7 @@ class TitleCreateSerializer(serializers.ModelSerializer):
         current_year = timezone.now().year
         if not 0 <= value <= current_year:
             raise serializers.ValidationError(
-                'Проверьте год создания произведения (должен быть нашей эры).'
+                'Укажите год создания произведения.'
             )
         return value
 
