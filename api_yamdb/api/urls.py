@@ -1,6 +1,4 @@
-from os import path
-
-from django.urls import include
+from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
 from .views import CategoryViewSet, GenreViewSet, TitleViewSet
@@ -12,5 +10,5 @@ router.register(r'genres', GenreViewSet, basename='genres')
 router.register(r'categories', CategoryViewSet, basename='categories')
 
 urlpatterns = [
-    path('/', include(router.urls)),
+    path('v1/', include(router.urls)),
 ]
