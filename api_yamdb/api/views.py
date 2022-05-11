@@ -17,6 +17,7 @@ from .serializers import (AdminUserSerializer, CategorySerializer,
                           TitleSerializer, UserSerializer)
 
 
+
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
@@ -34,6 +35,7 @@ class GenreViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
     permission_classes = [AdminOrReadOnlyPermission]
+
 
     @action(
         detail=False, methods=['delete'],
