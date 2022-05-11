@@ -1,6 +1,6 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator
 from django.db import models
-from django.contrib.auth import get_user_model
 from django.utils import timezone
 
 User = get_user_model()
@@ -62,7 +62,7 @@ class Title(models.Model):
 
 
 class GenreTitle(models.Model):
-    genre = models.ForeignKey(Genre, on_delete=models.SET_NULL)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
     title = models.ForeignKey(Title, on_delete=models.CASCADE)
 
     def __str__(self):
