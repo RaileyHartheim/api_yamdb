@@ -5,6 +5,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from django_filters.rest_framework import DjangoFilterBackend
 
 from reviews.models import Category, Genre, Title
 from users.models import User
@@ -15,12 +16,15 @@ from .serializers import (AdminUserSerializer, CategorySerializer,
                           GenreSerializer, SignupSerializer,
                           TokenSerializer, TitleCreateSerializer,
                           TitleSerializer, UserSerializer)
+from .filters import TitleFilter
 
 
 
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TitleFilter
     permission_classes = [AdminOrReadOnlyPermission]
 
     def get_serializer_class(self):
