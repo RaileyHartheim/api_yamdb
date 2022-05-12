@@ -1,5 +1,6 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, serializers, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (AllowAny, IsAuthenticated,
@@ -10,6 +11,7 @@ from reviews.models import Category, Genre, Review, Title
 from users.models import User
 
 from .confirmation import send_confirmation_code
+from .filters import TitleFilter
 from .permissions import (AdminOrReadOnlyPermission, AdminPermission,
                           AuthorOrModerOrAdminPermission)
 from .serializers import (AdminUserSerializer, CategorySerializer,
@@ -22,6 +24,8 @@ from .serializers import (AdminUserSerializer, CategorySerializer,
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = TitleFilter
     permission_classes = [AdminOrReadOnlyPermission]
 
     def get_serializer_class(self):
