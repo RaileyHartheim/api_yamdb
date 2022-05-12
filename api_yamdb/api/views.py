@@ -11,7 +11,7 @@ from .serializers import (CategorySerializer, GenreSerializer,
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
-    permission_classes = [AdminPermission, AdminOrReadOnlyPermission]
+    permission_classes = [AdminOrReadOnlyPermission]
 
     def get_serializer_class(self):
         if self.request.method in ('POST', 'PATCH',):
@@ -24,7 +24,7 @@ class GenreViewSet(viewsets.ModelViewSet):
     serializer_class = GenreSerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
-    permission_classes = [AdminPermission, AdminOrReadOnlyPermission]
+    permission_classes = [AdminOrReadOnlyPermission]
 
     @action(
         detail=False, methods=['delete'],
@@ -43,7 +43,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
-    permission_classes = [AdminPermission, AdminOrReadOnlyPermission]
+    permission_classes = [AdminOrReadOnlyPermission]
 
     @action(
         detail=False, methods=['delete'],
