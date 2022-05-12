@@ -2,6 +2,7 @@ from django.db.models import Avg
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+
 from reviews.models import Category, Comments, Genre, Review, Title
 from users.models import User
 
