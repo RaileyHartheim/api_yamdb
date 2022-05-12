@@ -17,7 +17,6 @@ from .serializers import (AdminUserSerializer, CategorySerializer,
                           TitleSerializer, UserSerializer)
 
 
-
 class TitleViewSet(viewsets.ModelViewSet):
     queryset = Title.objects.all()
     serializer_class = TitleSerializer
@@ -35,7 +34,6 @@ class GenreViewSet(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
     permission_classes = [AdminOrReadOnlyPermission]
-
 
     @action(
         detail=False, methods=['delete'],
@@ -118,7 +116,7 @@ class TokenViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         if default_token_generator.check_token(user, confirmation_code):
             token = RefreshToken.for_user(user)
             return Response(
-                {'token': token.access_token},
+                {'token': str(token.access_token)},
                 status=status.HTTP_200_OK
             )
         return Response(
