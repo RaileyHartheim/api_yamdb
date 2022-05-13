@@ -79,7 +79,7 @@ class Review(models.Model):
     text = models.TextField(
         max_length=255, verbose_name='Отзыв'
     )
-    score = models.IntegerField(
+    score = models.PositiveIntegerField(
         validators=[MaxValueValidator(10)], verbose_name='Оценка'
     )
     title = models.ForeignKey(

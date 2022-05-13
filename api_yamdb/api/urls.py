@@ -14,11 +14,11 @@ router_v1.register('users', UserViewSet, basename='users')
 router_v1.register('auth/signup', SignUpViewSet, basename='signup')
 router_v1.register('auth/token', TokenViewSet, basename='token')
 router_v1.register(
-    'titles/(?P<title_id>\\d+)/reviews',
+    r'^titles/(?P<title_id>\d+)/reviews',
     ReviewViewSet, basename='reviews')
 
 router_v1.register(
-    'titles/(?P<title_id>\\d+)/reviews/(?P<review_id>\\d+)/comments',
+    r'^titles/(?P<title_id>\d+)/reviews/(?P<review_id>\d+)/comments',
     CommentsViewSet, basename='reviews')
 
 
