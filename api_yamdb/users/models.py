@@ -9,21 +9,13 @@ USER_ROLES = [
 
 
 class User(AbstractUser):
+    REQUIRED_FIELDS = ['email']
+
     email = models.EmailField(
         verbose_name='E-mail',
         unique=True,
         max_length=254,
         blank=False
-    )
-    first_name = models.CharField(
-        verbose_name='Имя',
-        max_length=150,
-        null=True, blank=True
-    )
-    last_name = models.CharField(
-        verbose_name='Фамилия',
-        max_length=150,
-        null=True, blank=True
     )
     bio = models.TextField(
         verbose_name='Биография',
@@ -40,8 +32,6 @@ class User(AbstractUser):
         max_length=50,
         blank=True
     )
-
-    REQUIRED_FIELDS = ['email']
 
     class Meta:
         verbose_name = 'Пользователь'

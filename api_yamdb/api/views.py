@@ -82,26 +82,18 @@ class SignUpViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data.get('username')
         email = serializer.validated_data.get('email')
-        try:
-            user = User.objects.get(
-                username=username,
-                email=email)
-        except User.DoesNotExist:
-            if User.objects.filter(username=username).exists():
-                return Response(
-                    'Это имя пользователя уже занято',
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            if User.objects.filter(email=email).exists():
-                return Response(
-                    'Эта почта уже была использована при регистрации',
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            user = User.objects.create(
-                username=username,
-                email=email
+        if User.objects.filter(username=username).exists():
+            return Response(
+                'Это имя пользователя уже занято',
+                status=status.HTTP_400_BAD_REQUEST
             )
-            user.save()
+        if User.objects.filter(email=email).exists():
+            return Response(
+                'Эта почта уже была использована при регистрации',
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user = User.objects.create(username=username, email=email)
+        user.save()
         send_confirmation_code(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
