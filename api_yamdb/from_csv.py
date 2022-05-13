@@ -27,7 +27,8 @@ with open(os.path.join(current_dir, 'static/data/users.csv'), 'r') as fl:
     con.commit()
 
 
-with open(os.path.join(current_dir, 'static/data/genre.csv', ), 'r', encoding="utf8") as fl:
+with open(os.path.join(current_dir, 'static/data/genre.csv', ), 'r',
+          encoding="utf8") as fl:
     dr = csv.DictReader(fl)
     to_db = [(
         i['id'],
@@ -39,7 +40,8 @@ with open(os.path.join(current_dir, 'static/data/genre.csv', ), 'r', encoding="u
     con.commit()
 
 
-with open(os.path.join(current_dir, 'static/data/category.csv'), 'r', encoding="utf8") as fl:
+with open(os.path.join(current_dir, 'static/data/category.csv'), 'r',
+          encoding="utf8") as fl:
     dr = csv.DictReader(fl)
     to_db = [(
         i['id'],
@@ -51,7 +53,8 @@ with open(os.path.join(current_dir, 'static/data/category.csv'), 'r', encoding="
     con.commit()
 
 
-with open(os.path.join(current_dir, 'static/data/titles.csv'), 'r', encoding="utf8") as fl:
+with open(os.path.join(current_dir, 'static/data/titles.csv'), 'r',
+          encoding="utf8") as fl:
     dr = csv.DictReader(fl)
     to_db = [(
         i['id'],
@@ -64,7 +67,8 @@ with open(os.path.join(current_dir, 'static/data/titles.csv'), 'r', encoding="ut
     con.commit()
 
 
-with open(os.path.join(current_dir, 'static/data/genre_title.csv'), 'r', encoding="utf8") as fl:
+with open(os.path.join(current_dir, 'static/data/genre_title.csv'), 'r',
+          encoding="utf8") as fl:
     dr = csv.DictReader(fl)
     to_db = [(
         i['id'],
@@ -76,7 +80,8 @@ with open(os.path.join(current_dir, 'static/data/genre_title.csv'), 'r', encodin
     con.commit()
 
 
-with open(os.path.join(current_dir, 'static/data/review.csv'), 'r', encoding="utf8") as fl:
+with open(os.path.join(current_dir, 'static/data/review.csv'), 'r',
+          encoding="utf8") as fl:
     dr = csv.DictReader(fl)
     to_db = [(
         i['id'],
@@ -91,7 +96,8 @@ with open(os.path.join(current_dir, 'static/data/review.csv'), 'r', encoding="ut
     con.commit()
 
 
-with open(os.path.join(current_dir, 'static/data/comments.csv'), 'r', encoding="utf8") as fl:
+with open(os.path.join(current_dir, 'static/data/comments.csv'), 'r',
+          encoding="utf8") as fl:
     dr = csv.DictReader(fl)
     to_db = [(
         i['id'],
