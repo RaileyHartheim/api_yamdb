@@ -45,6 +45,6 @@ python manage.py runserver
 http://127.0.0.1:8000/redoc/
 ```
 ## Над проектом работали
-[Александр Мамонов](https://github.com/Alex-ai-dev): отзывы, комментарии
-[Кирилл Щипило](https://github.com/LeafguardRA): категории, жанры, произведения
-[Юлия Кажаева](https://github.com/RaileyHartheim): пользователи, регистрация и аутентификация
+- [Александр Мамонов](https://github.com/Alex-ai-dev): отзывы, комментарии
+- [Кирилл Щипило](https://github.com/LeafguardRA): категории, жанры, произведения
+- [Юлия Кажаева](https://github.com/RaileyHartheim): пользователи, регистрация и аутентификация
