@@ -83,19 +83,25 @@ class Review(models.Model):
         validators=[MaxValueValidator(10)], verbose_name='Оценка'
     )
     title = models.ForeignKey(
-        Title, on_delete=models.CASCADE,
-        related_name='reviews',
+        Title, on_delete=models.CASCADE, related_name='reviews', blank=True
     )
 
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['author', 'title'], name='unique_review')
+        ]
 
-class Сomments(models.Model):
+
+class Comments(models.Model):
     author = models.ForeignKey(
         User, on_delete=models.CASCADE,
         related_name='comment_author',
         verbose_name='Автор'
     )
     review = models.ForeignKey(
-        Review, on_delete=models.CASCADE, related_name='comment', blank=True)
+        Review, on_delete=models.CASCADE,
+        related_name='comment', blank=True, null=True)
     text = models.TextField(max_length=255, verbose_name='Коментарий')
     pub_date = models.DateTimeField(
         'Дата добавления', auto_now_add=True, db_index=True)
