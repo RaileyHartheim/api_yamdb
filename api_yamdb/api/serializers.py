@@ -69,7 +69,9 @@ class AdminUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            'username', 'first_name', 'last_name', 'email', 'role', 'bio'
+        )
 
     def validate_username(self, value):
         """Checks if user is trying to use 'me' as username"""
@@ -85,7 +87,9 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = '__all__'
+        fields = (
+            'username', 'first_name', 'last_name', 'email', 'role', 'bio'
+        )
         read_only_fields = ('role',)
 
     def validate_username(self, value):
