@@ -2,7 +2,7 @@ from django.db.models import Avg
 from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-from reviews.models import Category, Genre, Title
+from reviews.models import Category, Genre, Title, Review, Сomments
 from users.models import User
 
 
@@ -117,3 +117,45 @@ class TokenSerializer(serializers.Serializer):
     class Meta:
         model = User
         fields = ('username', 'confirmation_code')
+
+
+class ReviewSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(
+        slug_field='username', read_only=True,
+        default=serializers.CurrentUserDefault()
+    )
+
+    class Meta:
+        model = Review
+        fields = ('id', 'text', 'author', 'score', 'pub_date')
+
+    def validate(self, data):
+        if self.context['request'].method != 'POST':
+            return data
+
+        title_id = self.context['view'].kwargs.get('title_id')
+        author = self.context['request'].user
+        if Review.objects.filter(
+                author=author, title=title_id).exists():
+            raise serializers.ValidationError(
+                'Вы уже написали отзыв к этому произведению.'
+            )
+        return data
+
+    def validate_score(self, value):
+        if not 1 <= value <= 10:
+            raise serializers.ValidationError(
+                'Оценкой может быть целое число в диапазоне от 1 до 10.'
+            )
+        return value
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    author = serializers.SlugRelatedField(
+        slug_field='username', read_only=True,
+        default=serializers.CurrentUserDefault()
+    )
+
+    class Meta:
+        model = Сomments
+        fields = ('id', 'text', 'author', 'pub_date')

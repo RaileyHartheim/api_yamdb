@@ -83,7 +83,8 @@ class Review(models.Model):
         validators=[MaxValueValidator(10)], verbose_name='Оценка'
     )
     title = models.ForeignKey(
-        Title, on_delete=models.CASCADE
+        Title, on_delete=models.CASCADE,
+        related_name='reviews',
     )
 
 
