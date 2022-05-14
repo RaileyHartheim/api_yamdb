@@ -1,19 +1,23 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters, mixins, status, viewsets
+from rest_framework import filters, mixins, serializers, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from reviews.models import Category, Genre, Title
+
+from reviews.models import Category, Genre, Review, Title
 from users.models import User
 
 from .confirmation import send_confirmation_code
 from .filters import TitleFilter
-from .permissions import AdminOrReadOnlyPermission, AdminPermission
+from .permissions import (AdminOrReadOnlyPermission, AdminPermission,
+                          AuthorOrModerOrAdminPermission)
 from .serializers import (AdminUserSerializer, CategorySerializer,
-                          GenreSerializer, SignupSerializer,
+                          CommentsSerializer, GenreSerializer,
+                          ReviewSerializer, SignupSerializer,
                           TitleCreateSerializer, TitleSerializer,
                           TokenSerializer, UserSerializer)
 
@@ -55,7 +59,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     filter_backends = (filters.SearchFilter,)
     search_fields = ('name',)
-    permission_classes = [AdminOrReadOnlyPermission]
+    permission_classes = (AdminOrReadOnlyPermission,)
 
     @action(
         detail=False, methods=['delete'],
@@ -78,26 +82,18 @@ class SignUpViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
         serializer.is_valid(raise_exception=True)
         username = serializer.validated_data.get('username')
         email = serializer.validated_data.get('email')
-        try:
-            user = User.objects.get(
-                username=username,
-                email=email)
-        except User.DoesNotExist:
-            if User.objects.filter(username=username).exists():
-                return Response(
-                    'Это имя пользователя уже занято',
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            if User.objects.filter(email=email).exists():
-                return Response(
-                    'Эта почта уже была использована при регистрации',
-                    status=status.HTTP_400_BAD_REQUEST
-                )
-            user = User.objects.create(
-                username=username,
-                email=email
+        if User.objects.filter(username=username).exists():
+            return Response(
+                'Это имя пользователя уже занято',
+                status=status.HTTP_400_BAD_REQUEST
             )
-            user.save()
+        if User.objects.filter(email=email).exists():
+            return Response(
+                'Эта почта уже была использована при регистрации',
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        user = User.objects.create(username=username, email=email)
+        user.save()
         send_confirmation_code(user)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -155,3 +151,37 @@ class UserViewSet(viewsets.ModelViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+
+
+class CommentsViewSet(viewsets.ModelViewSet):
+    serializer_class = CommentsSerializer
+    permission_classes = [AuthorOrModerOrAdminPermission,
+                          IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
+        review = title.reviews.get(pk=self.kwargs.get('review_id'))
+        return review.comment.all()
+
+    def perform_create(self, serializer):
+        title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
+        review = title.reviews.get(pk=self.kwargs.get('review_id'))
+        serializer.save(author=self.request.user, review=review)
+
+
+class ReviewViewSet(viewsets.ModelViewSet):
+    serializer_class = ReviewSerializer
+    permission_classes = [AuthorOrModerOrAdminPermission,
+                          IsAuthenticatedOrReadOnly]
+
+    def get_queryset(self):
+        title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
+        return title.reviews.all()
+
+    def perform_create(self, serializer):
+        title = get_object_or_404(Title, pk=self.kwargs.get('title_id'))
+        if Review.objects.filter(author=self.request.user,
+                                 title=title).exists():
+            raise serializers.ValidationError()
+        else:
+            serializer.save(author=self.request.user, title=title)

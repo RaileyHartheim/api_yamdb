@@ -9,6 +9,8 @@ USER_ROLES = [
 
 
 class User(AbstractUser):
+    REQUIRED_FIELDS = ['email']
+
     email = models.EmailField(
         verbose_name='E-mail',
         unique=True,
@@ -30,8 +32,6 @@ class User(AbstractUser):
         max_length=50,
         blank=True
     )
-
-    REQUIRED_FIELDS = ['email']
 
     class Meta:
         verbose_name = 'Пользователь'
