@@ -2,8 +2,7 @@ from django.contrib.auth import get_user_model
 from django.core.validators import MaxValueValidator
 from django.db import models
 from django.utils import timezone
-
-User = get_user_model()
+from users.models import User
 
 
 class Category(models.Model):
@@ -32,7 +31,7 @@ class Genre(models.Model):
 
 class Title(models.Model):
     name = models.CharField(max_length=255, verbose_name='Название')
-    year = models.IntegerField(
+    year = models.PositiveIntegerField(
         validators=[MaxValueValidator(timezone.now().year)], verbose_name='Год'
     )
     description = models.CharField(
