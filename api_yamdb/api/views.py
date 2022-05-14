@@ -1,22 +1,21 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
-from django_filters.rest_framework import DjangoFilterBackend
-
 from reviews.models import Category, Genre, Title
 from users.models import User
 
 from .confirmation import send_confirmation_code
+from .filters import TitleFilter
 from .permissions import AdminOrReadOnlyPermission, AdminPermission
 from .serializers import (AdminUserSerializer, CategorySerializer,
                           GenreSerializer, SignupSerializer,
-                          TokenSerializer, TitleCreateSerializer,
-                          TitleSerializer, UserSerializer)
-from .filters import TitleFilter
+                          TitleCreateSerializer, TitleSerializer,
+                          TokenSerializer, UserSerializer)
 
 
 class TitleViewSet(viewsets.ModelViewSet):
